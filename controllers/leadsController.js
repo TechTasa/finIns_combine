@@ -73,11 +73,55 @@ exports.getLeadsByType = async (req, res) => {
         assignedTo: userId,
       });
 
+      // if (assignedLeadsCount === 0 && !leadAccess.includes(leadType)) {
+      //   return res.status(403).json({
+      //     status: "error",
+      //     message: "You do not have access to this lead type",
+      //   });
+      // }
       if (assignedLeadsCount === 0 && !leadAccess.includes(leadType)) {
-        return res.status(403).json({
-          status: "error",
-          message: "You do not have access to this lead type",
-        });
+        const html = `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>No Leads Available</title>
+              <style>
+                  body {
+                      font-family: Arial, sans-serif;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      height: 100vh;
+                      margin: 0;
+                      background-color: #f0f0f0;
+                  }
+                  .container {
+                      text-align: center;
+                      padding: 2rem;
+                      background-color: white;
+                      border-radius: 8px;
+                      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                  }
+                  h1 {
+                      color: #333;
+                  }
+                  p {
+                      color: #666;
+                  }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>No Leads Available</h1>
+                  <p>You currently have 0 leads assigned to you.</p>
+              </div>
+          </body>
+          </html>
+        `;
+      
+        return res.status(200).send(html);
       }
 
       query.$or = [
