@@ -138,7 +138,7 @@
             <% if (userType==='admin' || userType==='hr' || userType==='broker') { %>
             <li class="nav-item">
               <a class="nav-link" href="/dashboard/management">
-                <i class="bi bi-people"></i>  <%= userType === 'broker' ? 'My Referred Users' : 'Management' %>
+                <i class="bi bi-people"></i> <%= userType === 'broker' ? 'My Referred Users' : 'Management' %>
               </a>
             </li>
             <% } %>
@@ -228,6 +228,7 @@
             <!-- here -->
             <h1>Welcome, <%= userName %></h1>
             <div class="dashboard">
+
               <div class="widget">
                 <div class="widget-title">Total Leads</div>
                 <div class="widget-content">
@@ -242,7 +243,7 @@
                 </div>
               </div>
 
-               <div class="widget">
+              <div class="widget">
                 <div class="widget-title">Lead Types Distribution</div>
                 <div class="lead-types-grid">
                   <% for (let type in leadTypeCounts) { %>
@@ -253,8 +254,8 @@
                   </div>
                   <% } %>
                 </div>
-              </div> 
-             
+              </div>
+
               <div class="widget">
                 <div class="widget-title">Lead Status</div>
                 <div class="status-grid">
@@ -267,6 +268,17 @@
                   <% } %>
                 </div>
               </div>
+
+              <div class="widget">
+                <div class="widget-title">Referrals</div>
+                <div class="lead-types-grid">
+                  <% for (let referral of referralCounts) { %>
+                  <div class="status-item">
+                    <div class="status-number"><%= referral.count %></div>
+                    <div class="status-label"><%= referral.referral_code %></div>
+                  </div>
+                  <% } %>
+                </div>
             </div>
             <% } %>
 

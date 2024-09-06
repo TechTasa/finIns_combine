@@ -1,5 +1,6 @@
 
 const Lead = require('../models/Lead');
+const Referral = require('../models/Referral'); // Import the Referral model
 
 exports.dashboardOverview = async (req, res) => {
   if (!req.session.user) {
@@ -48,7 +49,8 @@ exports.dashboardOverview = async (req, res) => {
         })
       };
     }
-
+    const referralCounts = await Referral.find({});
+    console.log(referralCounts);
     res.render('dashboard', { 
       totalLeads, 
       todayLeads, 
@@ -56,7 +58,8 @@ exports.dashboardOverview = async (req, res) => {
       statusCounts,
       userType: req.session.user.userType,
       referralId: req.session.user.referralId,
-      userName: req.session.user.username
+      userName: req.session.user.username,
+      referralCounts 
     });
   } catch (err) {
     res.status(500).json({

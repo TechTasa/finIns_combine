@@ -21,6 +21,7 @@ const { connect} = require('./config/db');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const { log } = require('console');
+const Referral = require('./models/Referral'); // Import the Referral model
 
 require('dotenv').config();
 
@@ -75,11 +76,45 @@ app.use((req, res, next) => {
   app.use('/career',careerRoutes);
   app.use('/blog', blogPageRoutes);
 
+// Function to save referral to the database
+async function saveReferralToDatabase(referral) {
+  try {
+      await Referral.findOneAndUpdate(
+          { referral_code: referral },
+          { $inc: { count: 1 } },
+          { upsert: true }
+      );
+  } catch (error) {
+      console.error('Error saving referral to database:', error);
+  }
+}
 
-  app.get('/', (req, res) => {
-    const loggedin=req.session.user;
-    res.render("home",{loggedin})
-  })
+// Function to get all referral counts
+async function getReferralCounts() {
+  try {
+      return await Referral.find({});
+  } catch (error) {
+      console.error('Error fetching referral counts:', error);
+      return [];
+  }
+}
+
+
+ // Home route
+ app.get('/', async (req, res) => {
+  const referral = req.query.referral || null; // Capture referral from query
+  const loggedin = req.session.user;
+
+  // Check if the referral has already been processed in this session
+  if (referral && !req.session.referralProcessed) {
+      await saveReferralToDatabase(referral); // Save referral to the database
+      req.session.referralProcessed = true; // Mark referral as processed
+  }
+
+  const referralCounts = await getReferralCounts(); // Get referral counts
+  res.render("home", { loggedin, referralCounts }); // Pass referral counts to the view
+});
+
   
   app.get('/services', (req, res) => {
     const loggedin=req.session.user;
