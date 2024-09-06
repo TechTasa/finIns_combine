@@ -110,6 +110,27 @@
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 10px;
   }
+
+  .status-item2 {
+    width: 100%;
+    /* Ensure full width */
+    margin-bottom: 10px;
+    /* Space between items */
+    border-radius: 12px;
+    /* Rounded edges */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Drop shadow */
+    padding: 15px;
+    /* Add some padding for better spacing */
+    background-color: #fff;
+    /* Background color for visibility */
+  }
+
+  .lead-types-grid {
+    display: flex;
+    flex-direction: column;
+    /* Stack items vertically */
+  }
 </style>
 
 <body>
@@ -270,17 +291,25 @@
               </div>
 
               <div class="widget">
-                <div class="widget-title">Referrals</div>
-                <div class="lead-types-grid">
+                <div class="widget-title">Affiliate Links</div>
+                <div class="lead-types-grid" style="display: flex; flex-direction: column;">
+                  <!-- Use flexbox to stack items -->
                   <% for (let referral of referralCounts) { %>
-                  <div class="status-item">
+                  <div class="status-item2">
+                    <!-- Use the updated CSS class -->
                     <div class="status-number"><%= referral.count %></div>
-                    <div class="status-label"><%= referral.referral_code %></div>
+                    <div class="status-label">
+                      <%= referral.referral_code %>
+                      <br>
+                      <a href="https://combined.techtasa.com/?referral=<%= referral.referral_code %>" target="_blank">
+                        https://combined.techtasa.com/?referral=<%= referral.referral_code %>
+                      </a>
+                    </div>
                   </div>
                   <% } %>
                 </div>
-            </div>
-            <% } %>
+              </div>
+              <% } %>
 
 
       </main>

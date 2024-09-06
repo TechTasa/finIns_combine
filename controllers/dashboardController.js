@@ -50,7 +50,7 @@ exports.dashboardOverview = async (req, res) => {
       };
     }
     const referralCounts = await Referral.find({});
-    console.log(referralCounts);
+    // console.log(referralCounts);
     res.render('dashboard', { 
       totalLeads, 
       todayLeads, 
